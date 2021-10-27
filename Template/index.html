@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <title>user</title>
+
+</head>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing:1px;
+    }
+    .container{
+        width:100vw;
+        height:100vh;
+        position:relative;
+        overflow-x:hidden;
+        background:#bdc3c7;
+    }
+    .container-content{
+        margin:10px;
+    }
+    .sidebar{
+        width:16rem;
+        height:84vh;
+        padding:3rem 1.5rem;
+        background:#fff;
+        border-radius:5px;
+    }
+    .sidebar b{
+        color:#222;
+        font-size:1.5rem;
+        margin-left:2rem;
+    }
+    .content{
+        position:absolute;
+        left:21rem;
+        top:10px;
+        width:75%;
+        height:93%;
+        border-radius:5px;
+        background:#fff;
+        padding:1rem;
+    }
+
+    select{
+        width:98%;
+        height:2.3rem;
+        margin:2rem 0;
+        background:#fff;
+        border-radius:5px;
+        outline:none;
+        font-size:1rem;
+        padding:5px 10px;
+    }
+
+    button{
+        color:#fff;
+        background:#009432;
+        font-size:1.2rem;
+        font-weight:bold;
+        border-radius:5px;
+        border:none;
+        width:50%;
+        height:2.2rem;
+        margin-left:3.5rem;
+        cursor:pointer;
+    }
+</style>
+
+
+<body>
+    <div class="container">
+        <div class="container-content">
+            <div class="sidebar">
+            <form action="/show">
+                <b>Select Interest</b><br>
+                <select name="Interest" id="Interest">
+                    <option >- Select -</option>
+                    <option value="RELIANCE" >RELIANCE</option>
+                    <option value="SBIN">SBIN</option>
+                    <option value="INFY">INFY</option>
+                </select>
+                <div>
+                    <button type="submit" id="submit" value="submit">SUBMIT</button>
+                </div>
+            </form>
+            </div>
+            <div class="content">
+                <div id="chart">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script>
+
+    $(document).ready(function(){
+
+                $.getJSON("/show",function(data){
+
+                    var options = {
+                      series: [{
+                      name: 'calloi',
+                      data: data['calloi']
+                    }, {
+                      name: 'putoi',
+                      data: data['putoi']
+                    },
+                      ],
+                      chart: {
+                      type: 'bar',
+                      height: 350
+                    },
+                    plotOptions: {
+                      bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                      },
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      show: true,
+                      width: 2,
+                      colors: ['transparent']
+                    },
+                    xaxis: {
+                      strike: data['strike'],
+                    },
+                    yaxis: {
+                      title: {
+                        text: '$ (thousands)'
+                      }
+                    },
+                    fill: {
+                      opacity: 1
+                    },
+                    tooltip: {
+                      y: {
+                        formatter: function (val) {
+                          return "$ " + val + " thousands"
+                        }
+                      }
+                    }
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+
+            })
+
+})
+
+
+</script>
+
+
+</body>
+</html>
